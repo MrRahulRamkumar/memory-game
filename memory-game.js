@@ -30,11 +30,12 @@ function setup() {
   const urlSearchParams = new URLSearchParams(window.location.search);
   const params = Object.fromEntries(urlSearchParams.entries());
 
-  gridSize = params.gridSize || 5;
+  gridSize =
+    params.gridSize && !isNaN(params.gridSize) && params.gridSize >= 2 && params.gridSize <= 5 ? params.gridSize : 2;
   createCanvas(gridSize * tileSize, gridSize * tileSize);
   angleMode(DEGREES);
   textAlign(CENTER, CENTER);
-  textSize(24);
+  textSize(18);
 
   shuffleGrid();
   isHidden = false;
