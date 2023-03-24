@@ -28,7 +28,6 @@ function shuffleGrid() {
 function setup() {
   const urlSearchParams = new URLSearchParams(window.location.search);
   const params = Object.fromEntries(urlSearchParams.entries());
-  console.log(params);
 
   gridSize = params.gridSize || 5;
   createCanvas(gridSize * tileSize, gridSize * tileSize);
@@ -51,7 +50,6 @@ function setup() {
 
 function draw() {
   background(34, 34, 34);
-  gridSize = slider.value();
 
   for (let i = 0; i < gridSize; i++) {
     for (let j = 0; j < gridSize; j++) {
@@ -98,49 +96,51 @@ function changeRandomPointer() {
 }
 
 async function mousePressed() {
-  if (!isHidden) {
-    const clickedIndex = floor(mouseY / tileSize) * gridSize + floor(mouseX / tileSize);
-    if (clickedIndex === changedPointerIndex) {
-      isCorrect = true;
-      correctCount++;
-      document.getElementById('correct-count').innerHTML = `Correct: ${correctCount}`;
+  if (isHidden || isCorrect || isWrong) {
+    return;
+  }
+
+  const clickedIndex = floor(mouseY / tileSize) * gridSize + floor(mouseX / tileSize);
+  if (clickedIndex === changedPointerIndex) {
+    isCorrect = true;
+    correctCount++;
+    document.getElementById('correct-count').innerHTML = `Correct: ${correctCount}`;
+
+    setTimeout(() => {
+      isWrong = false;
+      isCorrect = false;
+      isHidden = false;
+      shuffleGrid();
 
       setTimeout(() => {
-        isWrong = false;
-        isCorrect = false;
-        isHidden = false;
-        shuffleGrid();
+        isHidden = true;
+        changeRandomPointer();
 
         setTimeout(() => {
-          isHidden = true;
-          changeRandomPointer();
-
-          setTimeout(() => {
-            isHidden = false;
-          }, 2000);
+          isHidden = false;
         }, 2000);
       }, 2000);
-    } else {
-      console.log('Incorrect!');
-      isWrong = true;
-      incorrectCount++;
-      document.getElementById('incorrect-count').innerHTML = `Incorrect: ${incorrectCount}`;
+    }, 2000);
+  } else {
+    console.log('Incorrect!');
+    isWrong = true;
+    incorrectCount++;
+    document.getElementById('incorrect-count').innerHTML = `Incorrect: ${incorrectCount}`;
+
+    setTimeout(() => {
+      isWrong = false;
+      isCorrect = false;
+      isHidden = false;
+      shuffleGrid();
 
       setTimeout(() => {
-        isWrong = false;
-        isCorrect = false;
-        isHidden = false;
-        shuffleGrid();
+        isHidden = true;
+        changeRandomPointer();
 
         setTimeout(() => {
-          isHidden = true;
-          changeRandomPointer();
-
-          setTimeout(() => {
-            isHidden = false;
-          }, 2000);
+          isHidden = false;
         }, 2000);
       }, 2000);
-    }
+    }, 2000);
   }
 }
