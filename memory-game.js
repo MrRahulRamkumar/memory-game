@@ -7,6 +7,7 @@ const textColor = '#FFF';
 let grid = [];
 let changedPointerIndex;
 let isHidden;
+let isClickable;
 let isCorrect;
 let isWrong;
 let timer;
@@ -37,6 +38,7 @@ function setup() {
 
   shuffleGrid();
   isHidden = false;
+  isClickable = false;
 
   setTimeout(() => {
     isHidden = true;
@@ -44,6 +46,7 @@ function setup() {
 
     setTimeout(() => {
       isHidden = false;
+      isClickable = true;
     }, 2000);
   }, 2000);
 }
@@ -96,7 +99,7 @@ function changeRandomPointer() {
 }
 
 async function mousePressed() {
-  if (isHidden || isCorrect || isWrong) {
+  if (!isClickable || isHidden || isCorrect || isWrong) {
     return;
   }
 
@@ -110,6 +113,7 @@ async function mousePressed() {
       isWrong = false;
       isCorrect = false;
       isHidden = false;
+      isClickable = false;
       shuffleGrid();
 
       setTimeout(() => {
@@ -117,6 +121,7 @@ async function mousePressed() {
         changeRandomPointer();
 
         setTimeout(() => {
+          isClickable = true;
           isHidden = false;
         }, 2000);
       }, 2000);
@@ -131,6 +136,7 @@ async function mousePressed() {
       isWrong = false;
       isCorrect = false;
       isHidden = false;
+      isClickable = false;
       shuffleGrid();
 
       setTimeout(() => {
@@ -138,6 +144,7 @@ async function mousePressed() {
         changeRandomPointer();
 
         setTimeout(() => {
+          isClickable = true;
           isHidden = false;
         }, 2000);
       }, 2000);
